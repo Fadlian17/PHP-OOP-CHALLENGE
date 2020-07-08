@@ -14,3 +14,11 @@
 2020-07-08 09:07:19 ALERT:  Achtung! Achtung!
 2020-07-08 09:07:19 CRITICAL: Medic!! We've got critical damages.
 2020-07-08 09:07:19 EMERGENCY: System hung. Contact system administrator immediately!.
+2020-07-08 10:25:26 INFO: This is an information about something.
+2020-07-08 10:25:26 ERROR: We can't divide any numbers by zero..
+2020-07-08 10:25:26 NOTICE: Someone loves your status.
+2020-07-08 10:25:26 WARNING: Insufficient funds.
+2020-07-08 10:25:26 DEBUG: This is debug message.
+2020-07-08 10:25:26 ALERT:  Achtung! Achtung!
+2020-07-08 10:25:26 CRITICAL: Medic!! We've got critical damages.
+2020-07-08 10:25:26 EMERGENCY: System hung. Contact system administrator immediately!.
