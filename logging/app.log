@@ -1,0 +1,16 @@
+2020-07-08 09:04:40 INFO: This is an information about something.
+2020-07-08 09:04:40 ERROR: We can't divide any numbers by zero..
+2020-07-08 09:04:40 NOTICE: Someone loves your status.
+2020-07-08 09:04:40 WARNING: Insufficient funds.
+2020-07-08 09:04:40 DEBUG: This is debug message.
+2020-07-08 09:04:40 ALERT:  Achtung! Achtung!
+2020-07-08 09:04:40 CRITICAL: Medic!! We've got critical damages.
+2020-07-08 09:04:40 EMERGENCY: System hung. Contact system administrator immediately!.
+2020-07-08 09:07:19 INFO: This is an information about something.
+2020-07-08 09:07:19 ERROR: We can't divide any numbers by zero..
+2020-07-08 09:07:19 NOTICE: Someone loves your status.
+2020-07-08 09:07:19 WARNING: Insufficient funds.
+2020-07-08 09:07:19 DEBUG: This is debug message.
+2020-07-08 09:07:19 ALERT:  Achtung! Achtung!
+2020-07-08 09:07:19 CRITICAL: Medic!! We've got critical damages.
+2020-07-08 09:07:19 EMERGENCY: System hung. Contact system administrator immediately!.
