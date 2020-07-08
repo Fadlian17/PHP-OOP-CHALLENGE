@@ -1,50 +1,82 @@
 <?php
-//Chaining 
+//method chain
 class Chain
 {
-    protected $item_data;
-    function __construct()
+
+    public $itemChain = array();
+    public $price;
+
+    function addItem($data)
     {
-        $this->item_data = new ArrayObject();
+        $addData = json_decode($data, true);
+        array_push($this->itemChain, $addData);
     }
 
-    protected function data_update($values)
+    function removeItem($data)
     {
-        if ($values != '') {
-            $this->item_data->append($values);
+        $item_id = json_decode($data, true);
+        for ($i = 0; $i < count($this->itemChain); $i++) {
+            if ($this->itemChain[$i]["item_id"] == $item_id["item_id"]) {
+                unset($this->itemChain[$i]);
+                $this->itemChain = array_values($this->itemChain);
+            }
         }
     }
 
-    protected function get_data()
+    function addDiscount()
     {
-        return $this->item_data;
+        $total = 0;
+        for ($i = 0; $i < count($this->itemChain); $i++) {
+            $total += $this->itemChain[$i]["price"] * $this->itemChain[$i]["quantity"] / 2;
+        }
+        $this->price = $total;
     }
 
-
-    protected function remove_data($index)
+    function totalItems()
     {
-        unset($this->item_data[$index]);
+        echo count($this->itemChain);
+    }
+
+    function totalQuantity()
+    {
+        $total = 0;
+        for ($i = 0; $i < count($this->itemChain); $i++) {
+            $total += $this->itemChain[$i]["quantity"];
+        }
+        echo $total;
+    }
+
+    function totalPrice()
+    {
+        echo $this->price;
+    }
+
+    function showAll()
+    {
+        var_dump($this->itemChain);
+    }
+
+    function checkout()
+    {
+        $dataJson = json_encode($this->itemChain, JSON_PRETTY_PRINT);
+        $open_file = fopen("./json/output.json", "a+");
+        fwrite($open_file, $dataJson);
+        $this->itemChain = null;
     }
 }
 
-class CartChain extends Chain
-{
-    protected $items;
-    protected $total_items;
-    protected $total_quantity;
-    protected $total_price;
-    public $disc_items;
-
-    function __construct()
-    {
-        //ovveride
-        parent::__construct();
-        $this->items = parent::get_data_items();
-        $this->total_items = 0;
-        $this->total_quantity = 0;
-        $this->total_price = 0;
-        $this->disc_items = 0;
-    }
-
-    //nanti dilanjutkan
-}
+$chain = new Chain();
+$chain->addItem('{"item_id":1,"price":30000,"quantity":3}');
+$chain->addItem('{"item_id":2,"price":1000, "quantity":3}');
+$chain->addItem('{"item_id":3,"price":5000, "quantity":2}');
+$chain->removeItem('{"item_id": 2}');
+$chain->addItem('{ "item_id": 4, "price": 400, "quantity": 6 }');
+$chain->addDiscount('50%');
+$chain->totalItems();
+echo "\n";
+$chain->totalQuantity();
+echo "\n";
+$chain->totalPrice();
+echo "\n";
+$chain->showAll();
+$chain->checkout();

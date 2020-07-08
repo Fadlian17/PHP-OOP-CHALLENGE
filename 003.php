@@ -1,84 +1,106 @@
 <?php
-class Auth
+
+//Auth & Verification
+
+class Verification
 {
-    protected $username;
-    protected $status;
-    protected $guest;
-    protected $time_login;
-    protected $credentials;
+
+    protected $people, $currentLogin;
+
     function __construct()
     {
-        $this->username = "";
-        $this->status = False;
-        $this->guest = False;
-        $this->time_login = "";
-        $this->credentials = '{"username":"root", "password":"secret"}';
+        $this->people = ["username" => "root", "password" => "secret"];
     }
-    function login($username, $password)
+
+    function data_user()
     {
-        self::validate($username, $password);
-    }
-    function decodeJson()
-    {
-        $data = json_decode($this->credentials);
-        return $data;
-    }
-    function id()
-    {
-        return rand(100, true);
-    }
-    function lastLogin()
-    {
-        if ($this->time_login == "") {
-            $this->time_login = "Mohon login dulu!\n";
-        }
-        echo $this->time_login . "\n";
-    }
-    function validate($username = "", $password = "")
-    {
-        $data = self::decodeJson();
-        // echo "$data->username";
-        if ($username == $data->username && $password == $data->password) {
-            $this->username = $data->username;
-            $this->status = True;
-            $this->guest = False;
-            $this->time_login = date(strftime("%d-%m-%Y %H:%M"));
-        } else {
-            echo "username dan password Anda salah!";
-        }
-    }
-    function user()
-    {
-        echo "Nama : " . $this->username . "\n";
-        echo "Status Login : " . $this->status . "\n";
-        echo "Status Guest : " . $this->guest . " \n";
-        echo "Login id : " . self::id() . "\n";
-        echo "Terakhir login : $this->time_login \n";
-    }
-    function guest()
-    {
-        echo $this->guest ? "TRUE" : "FALSE";
-    }
-    function check()
-    {
-        if ($this->status == True) {
-            echo "TRUE\n";
-        }
-        echo "FALSE\n";
-    }
-    function logout()
-    {
-        $this->username = "";
-        $this->status = False;
-        $this->guest = True;
+        return $this->people;
     }
 }
+
+class Auth extends Verification
+{
+
+    function login($dataVerified)
+    {
+        $login = $dataVerified;
+        $user = parent::data_user();
+        if ($login['username'] == $user['username'] and $login['password'] == $user['password']) {
+            $this->currentLogin = [
+                "id_user" => rand(),
+                "username" => $login["username"],
+                "password" => $login["password"],
+                "timestamp" => date("Y/m/d H:i:s"),
+                "status" => "logged in"
+            ];
+        }
+    }
+
+    function validate($dataVerified)
+    {
+        $login = $dataVerified;
+        $user = parent::data_user();
+        if ($login['username'] == $user['username'] and $login['password'] == $user['password']) {
+            return true;
+        }
+    }
+
+    function logout()
+    {
+        $this->currentLogin["status"] = "logout";
+        $this->currentLogin["timestamp"] = date("Y/m/d H:i:s");
+    }
+
+    function user()
+    {
+        $user_login = [
+            "username" => $this->currentLogin["username"],
+            "password" => $this->currentLogin["password"]
+        ];
+        echo "Username : " . $user_login["username"];
+        echo "\n";
+        echo "Password : " . $user_login["password"];
+    }
+
+    function id()
+    {
+        echo "User Id : " . $this->currentLogin["id_user"];
+    }
+
+    function check()
+    {
+        if ($this->currentLogin['status'] == "logged in") {
+            echo "Login : True";
+        } else {
+            echo "Login : False";
+        }
+    }
+
+    function guest()
+    {
+        if ($this->currentLogin['status'] == "logout") {
+            echo "Logout : True";
+        } else {
+            echo "Logout : False";
+        }
+    }
+
+    function lastLogin()
+    {
+        echo "Last Login : " . $this->currentLogin['timestamp'];
+    }
+}
+
 $auth = new Auth();
-$auth->login('root', 'secret');      // If valid, user will log in.
-$auth->validate('root', 'secret');   // Just verify username and password without log in.
-$auth->user();            // Get information about current logged in user.
-$auth->id();              // Get the User ID.
-$auth->check();           // Will returns True if user already logged in.
-$auth->guest();           // Will returns True if user not logged in.
-$auth->lastLogin();       // Get information when the user last logged in.
-$auth->logout();          // Log out the current logged in user.
+$auth->login(["username" => "root", "password" => "secret"]);
+$auth->validate(["username" => "root", "password" => "secret"]);
+$auth->user();
+echo "\n";
+$auth->id();
+echo "\n";
+$auth->check();
+echo "\n";
+$auth->guest();
+echo "\n";
+$auth->lastLogin();
+$auth->logout();
